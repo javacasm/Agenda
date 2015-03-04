@@ -1,7 +1,8 @@
-package com.foc.pmdm.agenda;
+package com.test.agenda;
 
 /**
  * Created by javacasm on 04/03/2015.
+ * Clase de negocio
  */
 public class Contacto {
 
@@ -14,4 +15,9 @@ public class Contacto {
     this.name=_name;
     this.phone=_phone;}
 
+    @Override
+    public String toString()
+    {
+        return "Name:"+name+" phone:"+phone;
+    }
 }

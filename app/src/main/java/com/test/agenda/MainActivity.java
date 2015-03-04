@@ -1,7 +1,8 @@
-package com.foc.pmdm.agenda;
+package com.test.agenda;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -23,6 +24,10 @@ public class MainActivity extends Activity {
 
         List<Contacto> lista=accesoDB.getAll();
 
+        for(Contacto contact : lista)
+        {
+            Log.i("Test",contact.toString());
+        }
 
     }
 

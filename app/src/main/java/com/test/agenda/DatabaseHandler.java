@@ -1,16 +1,18 @@
-package com.foc.pmdm.agenda;
+package com.test.agenda;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by javacasm on 04/03/2015.
+ * Sencilla aplicación agenda
  */
 public class DatabaseHandler extends SQLiteOpenHelper {
 
@@ -23,10 +25,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String CAMPO_NAME="name";
     private static final String CAMPO_PHONE="phone";
 
-
-    public DatabaseHandler(Context context)
+    private Context context;
+    public DatabaseHandler(Context _context)
     {
-        super(context,DATABASE_NAME,null,DATABASE_VERSION,null);
+        super(_context,DATABASE_NAME,null,DATABASE_VERSION,null);
+        this.context=_context;
     }
 
     @Override
@@ -60,13 +63,48 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     }
 
-    public List<Contacto> getAll()
+    public Contacto getContactoById(int _id)
     {
-        List<Contacto> lista=new ArrayList<Contacto>();
-        String strSQL=" SELECT * FROM "+TABLA_CONTACTOS+" NOMBRE like '?'";
-        String []argumentos={"A%"};
+        String strSQL=" SELECT * FROM "+TABLA_CONTACTOS+" id = '?'";
+        String []argumentos={Integer.toString(_id)};
         SQLiteDatabase db=getReadableDatabase();
         Cursor cursor=db.rawQuery(strSQL,argumentos);
+        Contacto contact=null;
+        if (cursor.getCount()!=1)
+        {
+            Toast.makeText(this.context,R.string.error,Toast.LENGTH_LONG);
+        }
+        else
+        {
+            contact=new Contacto(cursor.getInt(0),cursor.getString(1),cursor.getString(2));
+        }
+        return contact;
+    }
+
+    // Recuperamos un contacto por nombre
+    public Contacto getContactoByName(String sName)
+    {
+        String strSQL=" SELECT * FROM "+TABLA_CONTACTOS+" "+CAMPO_NAME+ " = '?'";
+        String []argumentos={sName};
+        SQLiteDatabase db=getReadableDatabase();
+        Cursor cursor=db.rawQuery(strSQL,argumentos);
+        Contacto contact=null;
+        if (cursor.getCount()!=1)
+        {  Toast.makeText(this.context,R.string.error,Toast.LENGTH_LONG);       }
+        else
+        {  contact=new Contacto(cursor.getInt(0),cursor.getString(1),cursor.getString(2));        }
+
+        return contact;
+    }
+
+    // Recuperamos todos los contactos
+    public List<Contacto> getAll()
+    {
+        List<Contacto> lista=new ArrayList<>();
+        String strSQL=" SELECT * FROM "+TABLA_CONTACTOS;
+
+        SQLiteDatabase db=getReadableDatabase();
+        Cursor cursor=db.rawQuery(strSQL,null);
         do{
             int id=cursor.getInt(0);
             String nombre=cursor.getString(1);

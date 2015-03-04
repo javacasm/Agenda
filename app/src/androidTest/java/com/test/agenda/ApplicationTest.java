@@ -1,4 +1,4 @@
-package com.foc.pmdm.agenda;
+package com.test.agenda;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;
