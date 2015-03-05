@@ -105,14 +105,17 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         SQLiteDatabase db=getReadableDatabase();
         Cursor cursor=db.rawQuery(strSQL,null);
-        do{
-            int id=cursor.getInt(0);
-            String nombre=cursor.getString(1);
-            String phone=cursor.getString(2);
-            Contacto contacto=new Contacto(id,nombre,phone);
-            lista.add(contacto);
-        } while(cursor.moveToNext());
-
+        int iREgistros=cursor.getCount();
+        if(iREgistros>0) {
+            cursor.moveToFirst();
+            do {
+                int id = cursor.getInt(cursor.getColumnIndex(CAMPO_ID));
+                String nombre = cursor.getString(cursor.getColumnIndex(CAMPO_NAME));
+                String phone = cursor.getString(cursor.getColumnIndex(CAMPO_PHONE));
+                Contacto contacto = new Contacto(id, nombre, phone);
+                lista.add(contacto);
+            } while (cursor.moveToNext());
+        }
         return lista;
     }
 }
